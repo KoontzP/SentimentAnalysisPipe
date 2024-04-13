@@ -59,14 +59,14 @@ h1 {
     <h1>Sentiment analysis</h1>
     <div class="conversation">
         <div class="welcome-message">
-            <p>Hello, I am a sentiment analysis tool, type in a sentence and I can label it as positive, negative or neutral.</p>
+            <p>Hello, I am a sentiment analysis tool, type in a text and I can label it as positive, negative or neutral.</p>
         </div>
         {% for message in conversation %}
             <div class="message">
                 {% if loop.index0 % 2 == 0 %}
                     <p><strong>You:</strong> {{ message }}</p>
                 {% else %}
-                    <p><strong>output:</strong> {{ message }}</p>
+                    <p><strong>Sentiment:</strong> {{ message }}</p>
                 {% endif %}
             </div>
         {% endfor %}
