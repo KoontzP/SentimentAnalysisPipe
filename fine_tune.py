@@ -57,6 +57,10 @@ train_dataset = PytorchDataset(train_encodings, train_labels)
 val_dataset = PytorchDataset(val_encodings, val_labels)
 test_dataset = PytorchDataset(test_encodings, test_labels)
 
+## Transformers architecture
+
+model = DistilBertForSequenceClassification.from_pretrained(model_name)
+
 # arguments/hyperparameters for training
 training_args = TrainingArguments(
     output_dir='./results',
@@ -69,8 +73,6 @@ training_args = TrainingArguments(
     logging_dir='./logs',
     logging_steps=10,
 )
-
-model = DistilBertForSequenceClassification.from_pretrained(model_name)
 
 trainer = Trainer(
     model=model,
