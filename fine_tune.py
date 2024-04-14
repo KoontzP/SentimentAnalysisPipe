@@ -86,7 +86,7 @@ trainer.train()
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased')
+model = DistilBertForSequenceClassification.from_pretrained(model_name)
 model.to(device)
 model.train()
 
