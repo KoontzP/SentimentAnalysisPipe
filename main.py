@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from flask import Flask, request, jsonify, render_template
 
-model_name = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+model_name = "saved_models"
 
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
