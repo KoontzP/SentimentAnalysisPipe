@@ -1,46 +1,46 @@
 from transformers import pipeline
-import torch
-import torch.nn.functional as F
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from flask import Flask, request, jsonify, render_template
 
-model_name = "saved_models"
-
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+classifier = pipeline("text-classification", model="KoontzP/Finetuned-sentiment-model")
 
 
 def label_analysis(prompt):
-    batch = tokenizer(prompt, padding=True, truncation=True, max_length=512, return_tensors="pt")
-    with torch.no_grad():
-        outputs = model(**batch)
-        label_ids = torch.argmax(outputs.logits, dim=1)
-        labels = [model.config.id2label[label_ids] for label_ids in label_ids.tolist()]
-    return labels
-
-
+    pred = classifier([prompt])
+    label = pred[0]['label']
+    number = int(label.split('_')[1])
+    if number == 0:
+        return "sadness"
+    elif number == 1:
+        return "joy"
+    elif number == 2:
+        return "love"
+    elif number == 3:
+        return "anger"
+    elif number == 4:
+        return "fear"
+    else:
+        return "surprise"
 
 
 app = Flask(__name__)
 
 conversation = []  # List to hold conversation messages
 
+
 @app.route("/", methods=["GET", "POST"])
 def chat():
     if request.method == "POST":
         prompt = request.form.get("prompt")
         if prompt:
-            conversation.append(prompt)  # Add the user's prompt to the conversation
-            # Generate the chatbot's response based on the user's prompt
+            conversation.append(prompt)
             labels_output = label_analysis(prompt)
-            conversation.append(f"Labeled as {labels_output[0]}.")  # Add the chatbot's response to the conversation
+            print(labels_output)
+            conversation.append(labels_output)
         # Render the template with the conversation and the latest prompt
         return render_template("index.html", conversation=conversation, prompt=prompt)
 
     # Render the template initially with an empty conversation and no prompt
     return render_template("index.html", conversation=[], prompt="")
-
-
 
 
 # Define a route to render the form
