@@ -6,6 +6,7 @@ classifier = pipeline("text-classification", model="KoontzP/Finetuned-sentiment-
 
 def label_analysis(prompt):
     pred = classifier([prompt])
+    print(pred[0])
     label = pred[0]['label']
     number = int(label.split('_')[1])
     if number == 0:
